@@ -60,6 +60,12 @@ router.post("/new", async (req, res) => {
     const { title, body, category, status } = req.body;
 
     const newPost = await repo.newPost(title, body, category, status);
+
+    if (!newPost) {
+      return res.status(404).json({ error: "Category not found." });
+    }
+
+    return res.status(201).json({ message: "Post created.", post: newPost });
   } catch (err) {
     console.log("Error creating a new post: ", err);
     res.status(500).send("Internal server error.");

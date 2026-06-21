@@ -13,7 +13,11 @@ const route = require("./routes/routes");
 app.use(express.json());
 app.use("/", route);
 
-// Inicia o servidor e exibe o endereço no console
-app.listen(port, () => {
-  console.log(`API rodando em http://localhost:${port}/`);
-});
+// Inicia o servidor e exibe o endereço no console (apenas quando executado diretamente)
+if (require.main === module) {
+  app.listen(port, () => {
+    console.log(`API rodando em http://localhost:${port}/`);
+  });
+}
+
+module.exports = app;
