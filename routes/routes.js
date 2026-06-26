@@ -37,6 +37,17 @@ router.get("/drafts", async (req, res) => {
   }
 });
 
+router.get("/categories", async (req, res) => {
+  try {
+    const categories = await repo.showCategories();
+
+    return res.json(categories);
+  } catch (err) {
+    console.log("Error fetching categories: ", err);
+    res.status(500).send("Internal server error.");
+  }
+});
+
 router.get("/:slug", async (req, res) => {
   try {
     const post = await repo.getBySlug(req.params.slug);
@@ -67,6 +78,21 @@ router.post("/new", async (req, res) => {
   }
 });
 
+router.post("/category", async (req, res) => {
+  try {
+    const { name } = req.body;
+
+    const newCategory = await repo.newCategory(name);
+
+    return res
+      .status(201)
+      .json({ message: "Category created.", category: newCategory });
+  } catch (err) {
+    console.log("Error creating new category: ", err);
+    res.status(500).send("Internal server error.");
+  }
+});
+
 router.patch("/:slug", async (req, res) => {
   try {
     const { title, body, category, status } = req.body;
@@ -83,7 +109,9 @@ router.patch("/:slug", async (req, res) => {
       return res.status(404).json({ error: "Post not found." });
     }
 
-    return res.status(200).json({ message: "Post updated.", post: updatedPost });
+    return res
+      .status(200)
+      .json({ message: "Post updated.", post: updatedPost });
   } catch (err) {
     console.log("Error updating post: ", err);
     res.status(500).send("Internal server error.");

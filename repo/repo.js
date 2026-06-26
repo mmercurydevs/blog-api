@@ -136,10 +136,9 @@ async function updatePost(slug, updates) {
 
   // If the caller sent an empty body, return the existing post rather than issuing a no-op UPDATE.
   if (setClauses.length === 0) {
-    const result = await db.query(
-      "SELECT * FROM articles WHERE slug = $1",
-      [slug],
-    );
+    const result = await db.query("SELECT * FROM articles WHERE slug = $1", [
+      slug,
+    ]);
     return result.rows[0] || null;
   }
 
@@ -154,6 +153,21 @@ async function updatePost(slug, updates) {
   return result.rows[0] || null;
 }
 
+async function showCategories() {
+  const result = await db.query("SELECT * FROM categories ORDER BY id ASC;");
+
+  return result.rows;
+}
+
+async function newCategory(name) {
+  const result = await db.query(
+    "INSERT INTO categories (name) VALUES ($1) RETURNING *;",
+    [name],
+  );
+
+  return result.rows[0];
+}
+
 module.exports = {
   showAllPosts,
   drafts,
@@ -161,4 +175,6 @@ module.exports = {
   newPost,
   deletePost,
   updatePost,
+  showCategories,
+  newCategory,
 };
