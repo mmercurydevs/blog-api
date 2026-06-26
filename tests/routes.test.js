@@ -17,6 +17,7 @@ async function createTestPost(slug, title = "Test Post", status = "draft") {
 }
 
 async function cleanupTestPosts() {
+  // Relies on all test slugs starting with "test-" to avoid touching real seed data.
   await db.query("DELETE FROM articles WHERE slug LIKE 'test-%'");
 }
 
@@ -25,6 +26,7 @@ afterEach(async () => {
 });
 
 afterAll(async () => {
+  // Closing the pool lets Jest exit cleanly; without this the process hangs.
   await db.end();
 });
 

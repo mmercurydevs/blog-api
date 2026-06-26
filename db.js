@@ -1,7 +1,5 @@
-// Importa o cliente PostgreSQL para conexão com o banco de dados
 const { Pool } = require("pg");
 
-// Configuração de conexão com PostgreSQL
 const db = new Pool({
   user: process.env.DB_USER,
   host: process.env.DB_HOST,
@@ -11,9 +9,9 @@ const db = new Pool({
   max: Number(process.env.DB_MAX),
 });
 
-// Conecta ao banco e exibe status no console
+// Eagerly validates the connection at startup so a misconfigured .env fails fast.
 db.query("SELECT NOW()")
-  .then(() => console.log("Conectado ao PostgreSQL com sucesso!"))
-  .catch((err) => console.error("Erro ao conectar ao banco:", err));
+  .then(() => console.log("Connected to PostgreSQL."))
+  .catch((err) => console.error("Database connection error:", err));
 
-module.exports = db; // Exporta a instância do pool para uso em outros módulos
+module.exports = db;

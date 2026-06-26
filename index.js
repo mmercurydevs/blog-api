@@ -1,11 +1,9 @@
 require("dotenv").config();
 
-// index.js - Ponto de entrada da aplicação
-const express = require("express"); // Importa o framework Express
-const app = express(); // Cria a instância da aplicação
-const port = Number(process.env.PORT) || 3000; // Define a porta em que a API irá rodar
+const express = require("express");
+const app = express();
+const port = Number(process.env.PORT) || 3000;
 
-// garante que o db.js conecta
 require("./db");
 
 const route = require("./routes/routes");
@@ -13,10 +11,10 @@ const route = require("./routes/routes");
 app.use(express.json());
 app.use("/", route);
 
-// Inicia o servidor e exibe o endereço no console (apenas quando executado diretamente)
+// Guard prevents the server from binding a port when this file is imported by tests.
 if (require.main === module) {
   app.listen(port, () => {
-    console.log(`API rodando em http://localhost:${port}/`);
+    console.log(`Server running at http://localhost:${port}/`);
   });
 }
 

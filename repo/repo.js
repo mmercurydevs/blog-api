@@ -27,6 +27,8 @@ async function showAllPosts({
     conditions.push(`EXTRACT(YEAR FROM a.published_at) = $${params.length}`);
   }
 
+  // limit and offset are pushed last so their $N positions are always consecutive
+  // regardless of how many optional filter params were added before them.
   params.push(limit, offset);
   const limitIdx = params.length - 1;
   const offsetIdx = params.length;
@@ -132,6 +134,7 @@ async function updatePost(slug, updates) {
     setClauses.push(`published_at = $${params.length}`);
   }
 
+  // If the caller sent an empty body, return the existing post rather than issuing a no-op UPDATE.
   if (setClauses.length === 0) {
     const result = await db.query(
       "SELECT * FROM articles WHERE slug = $1",

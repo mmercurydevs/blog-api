@@ -1,5 +1,4 @@
 services:
-  # Serviço do banco de dados PostgreSQL
   db:
     image: postgres:18
     restart: unless-stopped
@@ -18,7 +17,6 @@ services:
       timeout: 5s
       retries: 5
 
-  # Serviço da aplicação Node.js (API REST + GraphQL)
   api:
     build: .
     restart: unless-stopped

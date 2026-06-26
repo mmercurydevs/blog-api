@@ -2,12 +2,10 @@ const express = require("express");
 const router = express.Router();
 const repo = require("../repo/repo");
 
-// GET /
-// Returns the list of all posts with status "published".
 router.get("/", async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
-    const limit = Math.min(parseInt(req.query.limit) || 10, 100);
+    const limit = Math.min(parseInt(req.query.limit) || 10, 100); // cap at 100 to prevent oversized queries
     const { category, month, year } = req.query;
 
     const posts = await repo.showAllPosts({
@@ -25,8 +23,6 @@ router.get("/", async (req, res) => {
   }
 });
 
-// GET /drafts
-// Returns the list of all posts with status "draft".
 router.get("/drafts", async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
@@ -54,7 +50,6 @@ router.get("/:slug", async (req, res) => {
   }
 });
 
-// POST
 router.post("/new", async (req, res) => {
   try {
     const { title, body, category, status } = req.body;
@@ -95,7 +90,6 @@ router.patch("/:slug", async (req, res) => {
   }
 });
 
-// DELETE
 router.delete("/:slug", async (req, res) => {
   try {
     const deletedPost = await repo.deletePost(req.params.slug);
