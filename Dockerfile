@@ -3,7 +3,7 @@ WORKDIR /app
 
 # Copy the manifest first so Docker can cache the install layer.
 # If only application code changes, npm install is skipped on the next build.
-COPY package.json ./
+COPY package.json package-lock.json ./
 RUN npm ci --omit=dev
 
 COPY . .
